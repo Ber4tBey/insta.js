@@ -220,7 +220,7 @@ class User {
      * Add bestie List
      * @returns {Promise<void>}
      */
-      async  setBestie () {
+      async  setBesties () {
         await this.client.ig.friendship.setBesties(this.id)
     }
 
