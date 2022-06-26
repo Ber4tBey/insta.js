@@ -35,11 +35,12 @@ client.on('messageCreate', (message) => {
 client.login('username', 'password');
 ```
 
-## Links
-
-* [Owner](https://github.com/Androz2091)
-* [Maintainer](https://github.com/Ber4tbey)
+## Developers
+[![Ber4tbey](https://github.com/Ber4tbey.png?size=100)](https://github.com/Ber4tbey) 
+---|---
+[Ber4tbey](https://t.me/Ber4tbey) 
+Author, Base, Bug Fixes, Modules  
 
 ## Credits
 
-🧡 Big thanks to **[Nerixyz](https://github.com/Nerixyz)** and **[dilame](https://github.com/dilame)** for their libraries.
+🧡 Big thanks to **[Nerixyz](https://github.com/Nerixyz)** and **[dilame](https://github.com/dilame)** for their libraries.* [Androz2091](https://github.com/Androz2091)
