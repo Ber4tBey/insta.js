@@ -37,7 +37,6 @@ client.login('username', 'password');
 
 ## Developers
 [![Ber4tbey](https://github.com/Ber4tbey.png?size=100)](https://github.com/Ber4tbey) 
----|---
 [Ber4tbey](https://t.me/Ber4tbey) 
 Author, Base, Bug Fixes, Modules  
 
