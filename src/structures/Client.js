@@ -1,4 +1,4 @@
-const { withRealtime, withFbns } = require('instagram_mqtt')
+const { withRealtime, withFbns, GraphQLSubscriptions, SkywalkerSubscriptions } = require('instagram_mqtt')
 // const { GraphQLSubscriptions, SkywalkerSubscriptions } = require('instagram_mqtt/dist/realtime/subscriptions')
 const { IgApiClient } = require('instagram-private-api')
 const { EventEmitter } = require('events')
@@ -341,9 +341,9 @@ class Client extends EventEmitter {
      * @returns {Promise<void>}
      */
     async logout () {
-        await this.ig.account.logout();
-        await this.ig.realtime.disconnect();
-        await this.ig.fbns.disconnect();
+        await this.ig.account.logout()
+        await this.ig.realtime.disconnect()
+        await this.ig.fbns.disconnect()
     }
 
     /**
@@ -353,7 +353,7 @@ class Client extends EventEmitter {
      * @param {object} proxy Optional proxy object to safe connection: { user, pass, host, port }.
      * @param {object} [state] Optional state object. It can be generated using client.ig.exportState().
      */
-    async login (username, password, proxy,state) {
+    async login (username, password, proxy, state) {
         const ig = withFbns(withRealtime(new IgApiClient()))
         ig.state.generateDevice(username)
         await ig.qe.syncLoginExperiments()
@@ -363,7 +363,7 @@ class Client extends EventEmitter {
         if (state) {
             await ig.importState(state)
         }
-        
+        await ig.simulate.preLoginFlow()
         const response = await ig.account.login(username, password)
         const userData = await ig.user.info(response.pk)
         this.user = new ClientUser(this, {
@@ -389,7 +389,25 @@ class Client extends EventEmitter {
         ig.realtime.on('close', () => console.error('RealtimeClient closed'))
 
         await ig.realtime.connect({
-            irisData: await ig.feed.directInbox().request()
+            // tests
+            graphQlSubs: [
+                // these are some subscriptions
+                GraphQLSubscriptions.getAppPresenceSubscription(),
+                GraphQLSubscriptions.getDirectStatusSubscription(),
+                GraphQLSubscriptions.getDirectTypingSubscription(ig.state.cookieUserId),
+                GraphQLSubscriptions.getAsyncAdSubscription(ig.state.cookieUserId)
+            ],
+            // optional
+            skywalkerSubs: [
+                SkywalkerSubscriptions.directSub(ig.state.cookieUserId),
+                SkywalkerSubscriptions.liveSub(ig.state.cookieUserId)
+            ],
+            irisData: await ig.feed.directInbox().request(),
+            socksOptions: {
+                type: 6,
+                port: proxy.port,
+                host: `http://${proxy.user}:${proxy.pass}@${proxy.host}`
+            }
         })
         // PartialObserver<FbnsNotificationUnknown>
         ig.fbns.push$.subscribe((data) => this.handleFbnsReceive(data))
