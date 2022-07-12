@@ -350,11 +350,15 @@ class Client extends EventEmitter {
      * Log the bot in to Instagram
      * @param {string} username The username of the Instagram account.
      * @param {string} password The password of the Instagram account.
+     * @param {object} proxy Optional proxy object to safe connection: { user, pass, host, port }.
      * @param {object} [state] Optional state object. It can be generated using client.ig.exportState().
      */
-    async login (username, password, state) {
+    async login (username, password, proxy,state) {
         const ig = withFbns(withRealtime(new IgApiClient()))
         ig.state.generateDevice(username)
+        if (proxy) {
+            ig.state.proxyUrl = `http://${proxy.user}:${proxy.pass}@${proxy.host}:${proxy.port}`
+        }
         if (state) {
             await ig.importState(state)
         }
