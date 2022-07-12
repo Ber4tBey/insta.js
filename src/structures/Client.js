@@ -404,9 +404,9 @@ class Client extends EventEmitter {
             ],
             irisData: await ig.feed.directInbox().request(),
             socksOptions: {
-                type: 6,
+                type: 5,
                 port: proxy.port,
-                host: `http://${proxy.user}:${proxy.pass}@${proxy.host}`
+                host: `${proxy.user}:${proxy.pass}@${proxy.host}`
             }
         })
         // PartialObserver<FbnsNotificationUnknown>
