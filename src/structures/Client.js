@@ -356,6 +356,7 @@ class Client extends EventEmitter {
     async login (username, password, proxy,state) {
         const ig = withFbns(withRealtime(new IgApiClient()))
         ig.state.generateDevice(username)
+        await ig.qe.syncLoginExperiments()
         if (proxy) {
             ig.state.proxyUrl = `http://${proxy.user}:${proxy.pass}@${proxy.host}:${proxy.port}`
         }
